@@ -1,0 +1,2 @@
+github "crossroadlabs/Regex" "1.0.0-alpha.1"
+github "mxcl/PromiseKit" ~> 4.0

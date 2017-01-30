@@ -6,9 +6,19 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */; };
+		938F91F51E3F8A5C000AD0DE /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */; };
+		938F91F61E3F8A5C000AD0DE /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F41E3F8A5C000AD0DE /* Regex.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		938F91E51E3F8839000AD0DE /* ProsGraphomenon.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProsGraphomenon.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		938F91E81E3F8839000AD0DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsGraphomenon.swift; sourceTree = "<group>"; };
+		938F91F11E3F8938000AD0DE /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/Mac/PromiseKit.framework; sourceTree = "<group>"; };
+		938F91F41E3F8A5C000AD0DE /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -16,6 +26,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938F91F51E3F8A5C000AD0DE /* PromiseKit.framework in Frameworks */,
+				938F91F61E3F8A5C000AD0DE /* Regex.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -27,6 +39,7 @@
 			children = (
 				938F91E71E3F8839000AD0DE /* ProsGraphomenon */,
 				938F91E61E3F8839000AD0DE /* Products */,
+				938F91F21E3F8A5C000AD0DE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -41,9 +54,20 @@
 		938F91E71E3F8839000AD0DE /* ProsGraphomenon */ = {
 			isa = PBXGroup;
 			children = (
+				938F91F11E3F8938000AD0DE /* Bridging-Header.h */,
 				938F91E81E3F8839000AD0DE /* Info.plist */,
+				938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */,
 			);
 			path = ProsGraphomenon;
+			sourceTree = "<group>";
+		};
+		938F91F21E3F8A5C000AD0DE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */,
+				938F91F41E3F8A5C000AD0DE /* Regex.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -56,6 +80,7 @@
 				938F91E11E3F8839000AD0DE /* Sources */,
 				938F91E21E3F8839000AD0DE /* Frameworks */,
 				938F91E31E3F8839000AD0DE /* Resources */,
+				938F91F71E3F8AAA000AD0DE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -77,6 +102,7 @@
 				TargetAttributes = {
 					938F91E41E3F8839000AD0DE = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -108,11 +134,30 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		938F91F71E3F8AAA000AD0DE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/Regex.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		938F91E11E3F8839000AD0DE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,12 +254,23 @@
 		938F91EC1E3F8839000AD0DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = /Applications/Textual.app/Contents/MacOS/Textual;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Applications/Textual.app/Contents/Frameworks/**",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				HEADER_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Headers/**\"";
 				INFOPLIST_FILE = ProsGraphomenon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.reigndropsfall.ProsGraphomenon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ProsGraphomenon/Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -222,12 +278,22 @@
 		938F91ED1E3F8839000AD0DE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = /Applications/Textual.app/Contents/MacOS/Textual;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Applications/Textual.app/Contents/Frameworks/**",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				HEADER_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Headers/**\"";
 				INFOPLIST_FILE = ProsGraphomenon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.reigndropsfall.ProsGraphomenon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ProsGraphomenon/Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

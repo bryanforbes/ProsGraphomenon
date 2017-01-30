@@ -21,6 +21,8 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Bryan Forbes. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string></string>
+	<string>ProsGraphomenonPrincipalClass</string>
+	<key>MinimumTextualVersion</key>
+	<string>6.0.0</string>
 </dict>
 </plist>
