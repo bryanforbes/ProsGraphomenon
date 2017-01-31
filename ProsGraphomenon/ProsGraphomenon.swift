@@ -61,6 +61,7 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 	func pluginLoadedIntoMemory() {
 		if let usersPlist = getSupportPlist(name: "UsersMenu"),
 			let menu = menuController?.userControlMenu {
+			menu.addItem(NSMenuItem.separator())
 			addMenuItems(type: .User, menu: menu, items: usersPlist)
 		}
 		if let channelPlist = getSupportPlist(name: "ChannelMenu"),
@@ -107,25 +108,22 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 					return
 			}
 
-			var menuItem: NSMenuItem? = nil;
-
 			if itemType == "menu", let subItems = dict["items"] as? [[String: Any]] {
 				let subMenu = NSMenu(title: title)
 
 				addMenuItems(type: commandType, menu: subMenu, items: subItems)
 
-				menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
-				menuItem!.submenu = subMenu
+				let menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+				menuItem.submenu = subMenu
+				menu.addItem(menuItem)
 			} else if itemType == "item", let commandsValue = dict["commands"] {
 				if let command = commandsValue as? String {
 					addCommandItem(menu: menu, title: title, type: commandType, command: command)
 				} else if let commands = commandsValue as? [String] {
 					addCommandItem(menu: menu, title: title, type: commandType, commands: commands)
 				}
-			}
-
-			if menuItem != nil {
-				menu.addItem(menuItem!)
+			} else if itemType == "separator" {
+				menu.addItem(NSMenuItem.separator())
 			}
 		}
 	}
