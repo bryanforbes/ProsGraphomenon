@@ -10,27 +10,8 @@ import Foundation
 import PromiseKit
 import Regex
 
-internal enum TextEffect: CustomStringConvertible {
-	case bold
-	case italic
-	case underline
-	case color(Int, Int)
-	case end
-
-	var description: String {
-		switch self {
-		case .bold:
-			return "\u{2}"
-		case .italic:
-			return "\u{1d}"
-		case .underline:
-			return "\u{1f}"
-		case .color(let fg, let bg):
-			return "\u{3}\(fg),\(bg)"
-		case .end:
-			return "\u{f}"
-		}
-	}
+internal struct Token {
+	var text: String
 }
 
 internal func getSupportDirectory() -> URL? {
@@ -68,7 +49,7 @@ fileprivate enum CommandType {
 }
 
 class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
-	fileprivate var varsRE = "%%|%([^%]+)%".r!
+	fileprivate var varsRE = "%(%)|%([^%]+)%".r!
 	fileprivate var colorsRE = try! Regex(pattern: "^color\\((\\d+)(?:, *(\\d+))?\\)$", groupNames: "fg", "bg")
 
 	fileprivate var menuController: TXMenuController? {
@@ -89,7 +70,7 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 	}
 
 	@objc func handleCommand(sender: NSMenuItem) {
-		guard let (type, templates) = sender.representedObject as? (CommandType, [String]),
+		guard let (type, templates) = sender.representedObject as? (CommandType, [Any]),
 			let client = menuController?.selectedClient,
 			let channel = menuController?.selectedChannel else {
 				return
@@ -100,10 +81,14 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 		switch type {
 		case .User:
 			commands = menuController!.selectedMembers(sender).flatMap { channelUser in
-				return getUserCommands(client: client, channel: channel, user: channelUser.user, templates: templates)
+				return getCommands(templates: templates) { token -> String in
+					return getUserCommands(token: token, client: client, channel: channel, user: channelUser.user)
+				}
 			}
 		case .Channel:
-			commands = getChannelCommands(client: client, channel: channel, templates: templates)
+			commands = getCommands(templates: templates) { token -> String in
+				return getChannelCommands(token: token, client: client, channel: channel)
+			}
 		}
 
 		if commands != nil {
@@ -148,8 +133,41 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 	fileprivate func addCommandItem(menu: NSMenu, title: String, type commandType: CommandType, commands: [String]) {
 		let item = NSMenuItem(title: title, target: self, action: #selector(ProsGraphomenonPrincipalClass.handleCommand(sender:)))
 
-		let replaced = commands.map { command -> String in
-			return varsRE.replaceAll(in: command, using: formattingReplacer)
+		let replaced = commands.map { command -> Any in
+			let template = command.split(using: varsRE).enumerated().map { (index, text) -> Any in
+				if index % 2 == 0 {
+					return text
+				}
+
+				switch text {
+				case "%": return text
+				case "bold": return "\u{2}"
+				case "italic": return "\u{1d}"
+				case "underline": return "\u{1f}"
+				case "end": return "\u{f}"
+				case let color where color =~ "^color\\(":
+					guard let match = colorsRE.findFirst(in: color),
+						let fg = match.group(named: "fg") else {
+							fallthrough
+					}
+
+					var bg = "0"
+
+					if let possibleBg = match.group(named: "bg") {
+						bg = possibleBg
+					}
+
+					return "\u{3}\(fg),\(bg)"
+				default:
+					return Token(text: text)
+				}
+			}
+
+			if let strings = template as? [String] {
+				return strings.joined(separator: "")
+			}
+
+			return template
 		}
 
 		item.representedObject = (commandType, replaced)
@@ -160,69 +178,47 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 		addCommandItem(menu: menu, title: title, type: commandType, commands: [ command ])
 	}
 
-	fileprivate func formattingReplacer(match: Match) -> String? {
-		guard let variable = match.group(at: 1) else {
-			return "%%"
+	fileprivate func getCommands(templates: [Any], transform: (Token) -> String) -> [String] {
+		if let strings = templates as? [String] {
+			return strings
 		}
 
-		switch variable {
-		case "bold": return TextEffect.bold.description
-		case "italic": return TextEffect.italic.description
-		case "underline": return TextEffect.underline.description
-		case "end": return TextEffect.end.description
-		case let color where color =~ "^color\\(.*\\)$":
-			guard let match = colorsRE.findFirst(in: color),
-				let fg = match.group(named: "fg") else {
-					fallthrough
+		return templates.map { template -> String in
+			guard let parts = template as? [Any] else {
+				return template as! String
 			}
 
-			var bg = "0"
+			let transformed = parts.map { part -> String in
+				guard let token = part as? Token else {
+					return part as! String
+				}
 
-			if let possibleBg = match.group(named: "bg") {
-				bg = possibleBg
+				return transform(token)
 			}
 
-			return TextEffect.color(Int(fg)!, Int(bg)!).description
-		default:
-			return nil
+			return transformed.joined(separator: "")
 		}
 	}
 
-	fileprivate func getUserCommands(client: IRCClient, channel: IRCChannel, user: IRCUser, templates: [String]) -> [String] {
-		return templates.map { command -> String in
-			return varsRE.replaceAll(in: command) { match in
-				guard let variable = match.group(at: 1) else {
-					return "%"
-				}
-
-				switch variable {
-				case "user": return user.nickname
-				case "banmask": return user.banMask
-				default: return replaceCommonVars(match: match, client: client, channel: channel)
-				}
-			}
+	fileprivate func getUserCommands(token: Token, client: IRCClient, channel: IRCChannel, user: IRCUser) -> String {
+		switch token.text {
+		case "user": return user.nickname
+		case "banmask": return user.banMask
+		default: return replaceCommonVars(token: token, client: client, channel: channel)
 		}
 	}
 
-	fileprivate func getChannelCommands(client: IRCClient, channel: IRCChannel, templates: [String]) -> [String] {
-		return templates.map { command -> String in
-			return varsRE.replaceAll(in: command) { match in
-				guard let variable = match.group(at: 1) else {
-					return "%"
-				}
-
-				switch variable {
-				default: return replaceCommonVars(match: match, client: client, channel: channel)
-				}
-			}
+	fileprivate func getChannelCommands(token: Token, client: IRCClient, channel: IRCChannel) -> String {
+		switch token.text {
+		default: return replaceCommonVars(token: token, client: client, channel: channel)
 		}
 	}
 
-	fileprivate func replaceCommonVars(match: Match, client: IRCClient, channel: IRCChannel) -> String? {
-		switch match.group(at: 1)! {
+	fileprivate func replaceCommonVars(token: Token, client: IRCClient, channel: IRCChannel) -> String {
+		switch token.text {
 		case "channel": return channel.name
 		case "me": return client.userNickname
-		default: return nil
+		default: return "Token(\(token.text))"
 		}
 	}
 }
