@@ -8,19 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		9362153A1E40E7800080ED86 /* NSAlert+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936215391E40E7800080ED86 /* NSAlert+Promise.swift */; };
+		9362153C1E4119820080ED86 /* PreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9362153B1E4119820080ED86 /* PreferencesView.xib */; };
+		9362153F1E4119FB0080ED86 /* ProsPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9362153E1E4119FB0080ED86 /* ProsPreferences.swift */; };
+		936215411E4120030080ED86 /* MenuEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936215401E4120030080ED86 /* MenuEditorView.xib */; };
+		936215431E412BB60080ED86 /* ProsMenuEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936215421E412BB60080ED86 /* ProsMenuEditor.swift */; };
 		938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */; };
 		938F91F51E3F8A5C000AD0DE /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */; };
 		938F91F61E3F8A5C000AD0DE /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F41E3F8A5C000AD0DE /* Regex.framework */; };
+		93B7B9891E4156C1002206C6 /* ProsMenuParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		936215391E40E7800080ED86 /* NSAlert+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAlert+Promise.swift"; sourceTree = "<group>"; };
+		9362153B1E4119820080ED86 /* PreferencesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferencesView.xib; path = Resources/PreferencesView.xib; sourceTree = "<group>"; };
+		9362153E1E4119FB0080ED86 /* ProsPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsPreferences.swift; sourceTree = "<group>"; };
+		936215401E4120030080ED86 /* MenuEditorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuEditorView.xib; path = Resources/MenuEditorView.xib; sourceTree = "<group>"; };
+		936215421E412BB60080ED86 /* ProsMenuEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsMenuEditor.swift; sourceTree = "<group>"; };
 		938F91E51E3F8839000AD0DE /* ProsGraphomenon.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProsGraphomenon.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		938F91E81E3F8839000AD0DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsGraphomenon.swift; sourceTree = "<group>"; };
 		938F91F11E3F8938000AD0DE /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/Mac/PromiseKit.framework; sourceTree = "<group>"; };
 		938F91F41E3F8A5C000AD0DE /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
+		93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsMenuParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,9 +46,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9362153D1E41198E0080ED86 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9362153B1E4119820080ED86 /* PreferencesView.xib */,
+				936215401E4120030080ED86 /* MenuEditorView.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		938F91DC1E3F8839000AD0DE = {
 			isa = PBXGroup;
 			children = (
+				9362153D1E41198E0080ED86 /* Resources */,
 				938F91E71E3F8839000AD0DE /* ProsGraphomenon */,
 				938F91E61E3F8839000AD0DE /* Products */,
 				938F91F21E3F8A5C000AD0DE /* Frameworks */,
@@ -60,6 +80,9 @@
 				938F91E81E3F8839000AD0DE /* Info.plist */,
 				938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */,
 				936215391E40E7800080ED86 /* NSAlert+Promise.swift */,
+				9362153E1E4119FB0080ED86 /* ProsPreferences.swift */,
+				936215421E412BB60080ED86 /* ProsMenuEditor.swift */,
+				93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */,
 			);
 			path = ProsGraphomenon;
 			sourceTree = "<group>";
@@ -132,6 +155,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				936215411E4120030080ED86 /* MenuEditorView.xib in Resources */,
+				9362153C1E4119820080ED86 /* PreferencesView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +187,9 @@
 			files = (
 				938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */,
 				9362153A1E40E7800080ED86 /* NSAlert+Promise.swift in Sources */,
+				9362153F1E4119FB0080ED86 /* ProsPreferences.swift in Sources */,
+				936215431E412BB60080ED86 /* ProsMenuEditor.swift in Sources */,
+				93B7B9891E4156C1002206C6 /* ProsMenuParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

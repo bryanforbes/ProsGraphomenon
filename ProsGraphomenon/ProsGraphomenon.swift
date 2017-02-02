@@ -49,6 +49,14 @@ fileprivate enum CommandType {
 }
 
 class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
+	var pluginPreferencesPaneMenuItemName: String = "ProsGraphomenon"
+	var pluginPreferencesPaneView: NSView {
+		get {
+			return prefsController.view
+		}
+	}
+
+	fileprivate var prefsController: ProsPreferences
 	fileprivate var varsRE = "%(%)|%([^%]+)%".r!
 	fileprivate var colorsRE = try! Regex(pattern: "^color\\((\\d+)(?:, *(\\d+))?\\)$", groupNames: "fg", "bg")
 
@@ -58,19 +66,26 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 		}
 	}
 
+	override init() {
+		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
+		prefsController = ProsPreferences(nibName: "PreferencesView", bundle: bundle)!
+
+		super.init()
+	}
+
 	func pluginLoadedIntoMemory() {
-		if let usersPlist = getSupportPlist(name: "UsersMenu"),
-			let menu = menuController?.userControlMenu {
+		if let menu = menuController?.userControlMenu,
+			let usersItems = ProsMenuParser.read(name: "UsersMenu") {
 			menu.addItem(NSMenuItem.separator())
-			addMenuItems(type: .User, menu: menu, items: usersPlist)
+			addMenuItems(type: .User, menu: menu, items: usersItems)
 		}
-		if let channelPlist = getSupportPlist(name: "ChannelMenu"),
-			let menu = menuController?.channelViewDefaultMenu {
-			addMenuItems(type: .Channel, menu: menu, items: channelPlist)
+		if let menu = menuController?.channelViewDefaultMenu,
+			let channelItems = ProsMenuParser.read(name: "ChannelMenu") {
+			addMenuItems(type: .Channel, menu: menu, items: channelItems)
 		}
 	}
 
-	@objc func handleCommand(sender: NSMenuItem) {
+	dynamic func handleCommand(sender: NSMenuItem) {
 		guard let (type, templates) = sender.representedObject as? (CommandType, [Any]),
 			let client = menuController?.selectedClient,
 			let channel = menuController?.selectedChannel else {
@@ -101,37 +116,28 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 		}
 	}
 
-	fileprivate func addMenuItems(type commandType: CommandType, menu: NSMenu, items: [[String: Any]]) {
-		items.forEach { dict in
-			guard let itemType = dict["type"] as? String,
-				let title = dict["title"] as? String else {
-					return
-			}
+	fileprivate func addMenuItems(type commandType: CommandType, menu: NSMenu, items: [ ProsMenuItem ]) {
+		items.forEach { item in
+			if let menuItem = item as? ProsMenu {
+				let subMenu = NSMenu(title: menuItem.title)
 
-			if itemType == "menu", let subItems = dict["items"] as? [[String: Any]] {
-				let subMenu = NSMenu(title: title)
+				addMenuItems(type: commandType, menu: subMenu, items: menuItem.items)
 
-				addMenuItems(type: commandType, menu: subMenu, items: subItems)
-
-				let menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
-				menuItem.submenu = subMenu
-				menu.addItem(menuItem)
-			} else if itemType == "item", let commandsValue = dict["commands"] {
-				if let command = commandsValue as? String {
-					addCommandItem(menu: menu, title: title, type: commandType, command: command)
-				} else if let commands = commandsValue as? [String] {
-					addCommandItem(menu: menu, title: title, type: commandType, commands: commands)
-				}
-			} else if itemType == "separator" {
+				let subMenuItem = NSMenuItem(title: menuItem.title, action: nil, keyEquivalent: "")
+				subMenuItem.submenu = subMenu
+				menu.addItem(subMenuItem)
+			} else if let commandItem = item as? ProsCommand {
+				addCommandItem(menu: menu, type: commandType, commandItem: commandItem)
+			} else if item is ProsSeparator {
 				menu.addItem(NSMenuItem.separator())
 			}
 		}
 	}
 
-	fileprivate func addCommandItem(menu: NSMenu, title: String, type commandType: CommandType, commands: [String]) {
-		let item = NSMenuItem(title: title, target: self, action: #selector(ProsGraphomenonPrincipalClass.handleCommand(sender:)))
+	fileprivate func addCommandItem(menu: NSMenu, type commandType: CommandType, commandItem: ProsCommand) {
+		let item = NSMenuItem(title: commandItem.title, target: self, action: #selector(ProsGraphomenonPrincipalClass.handleCommand(sender:)))
 
-		let replaced = commands.map { command -> Any in
+		let replaced = commandItem.commands.map { command -> Any in
 			let template = command.split(using: varsRE).enumerated().map { (index, text) -> Any in
 				if index % 2 == 0 {
 					return text
@@ -170,10 +176,6 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 
 		item.representedObject = (commandType, replaced)
 		menu.addItem(item)
-	}
-
-	fileprivate func addCommandItem(menu: NSMenu, title: String, type commandType: CommandType, command: String) {
-		addCommandItem(menu: menu, title: title, type: commandType, commands: [ command ])
 	}
 
 	fileprivate func getCommands(templates: [Any], transform: (Token) -> String) -> [String] {
