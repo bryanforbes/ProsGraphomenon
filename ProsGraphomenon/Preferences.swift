@@ -8,18 +8,18 @@
 
 import Foundation
 
-class ProsPreferences: NSViewController {
+class Preferences: NSViewController {
 	@IBOutlet weak var usersView: NSView!
 	@IBOutlet weak var channelView: NSView!
 
-	var usersEditor: ProsMenuEditor!
-	var channelEditor: ProsMenuEditor!
+	var usersEditor: MenuEditor!
+	var channelEditor: MenuEditor!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		usersEditor = ProsMenuEditor(plistName: "UsersMenu")
-		channelEditor = ProsMenuEditor(plistName: "ChannelMenu")
+		usersEditor = MenuEditor(plistName: "UsersMenu")
+		channelEditor = MenuEditor(plistName: "ChannelMenu")
 
 		addSubview(subview: usersEditor.view, to: usersView)
 		addSubview(subview: channelEditor.view, to: channelView)

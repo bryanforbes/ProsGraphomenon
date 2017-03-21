@@ -7,30 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9362153A1E40E7800080ED86 /* NSAlert+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936215391E40E7800080ED86 /* NSAlert+Promise.swift */; };
+		933E3D971E81AE7800700B57 /* NSAlert+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933E3D961E81AE7800700B57 /* NSAlert+Promise.swift */; };
 		9362153C1E4119820080ED86 /* PreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9362153B1E4119820080ED86 /* PreferencesView.xib */; };
-		9362153F1E4119FB0080ED86 /* ProsPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9362153E1E4119FB0080ED86 /* ProsPreferences.swift */; };
+		9362153F1E4119FB0080ED86 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9362153E1E4119FB0080ED86 /* Preferences.swift */; };
 		936215411E4120030080ED86 /* MenuEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936215401E4120030080ED86 /* MenuEditorView.xib */; };
-		936215431E412BB60080ED86 /* ProsMenuEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936215421E412BB60080ED86 /* ProsMenuEditor.swift */; };
+		936215431E412BB60080ED86 /* MenuEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936215421E412BB60080ED86 /* MenuEditor.swift */; };
 		938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */; };
 		938F91F51E3F8A5C000AD0DE /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */; };
-		938F91F61E3F8A5C000AD0DE /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F91F41E3F8A5C000AD0DE /* Regex.framework */; };
-		93B7B9891E4156C1002206C6 /* ProsMenuParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */; };
+		93B7B9891E4156C1002206C6 /* MenuParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B7B9881E4156C1002206C6 /* MenuParser.swift */; };
+		93BC88E81E5A9D6300129CF4 /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BC88E71E5A9D6300129CF4 /* Template.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		936215391E40E7800080ED86 /* NSAlert+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAlert+Promise.swift"; sourceTree = "<group>"; };
+		933E3D961E81AE7800700B57 /* NSAlert+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAlert+Promise.swift"; sourceTree = "<group>"; };
 		9362153B1E4119820080ED86 /* PreferencesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferencesView.xib; path = Resources/PreferencesView.xib; sourceTree = "<group>"; };
-		9362153E1E4119FB0080ED86 /* ProsPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsPreferences.swift; sourceTree = "<group>"; };
+		9362153E1E4119FB0080ED86 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		936215401E4120030080ED86 /* MenuEditorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuEditorView.xib; path = Resources/MenuEditorView.xib; sourceTree = "<group>"; };
-		936215421E412BB60080ED86 /* ProsMenuEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsMenuEditor.swift; sourceTree = "<group>"; };
+		936215421E412BB60080ED86 /* MenuEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuEditor.swift; sourceTree = "<group>"; };
 		938F91E51E3F8839000AD0DE /* ProsGraphomenon.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProsGraphomenon.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		938F91E81E3F8839000AD0DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsGraphomenon.swift; sourceTree = "<group>"; };
 		938F91F11E3F8938000AD0DE /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/Mac/PromiseKit.framework; sourceTree = "<group>"; };
-		938F91F41E3F8A5C000AD0DE /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
-		93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProsMenuParser.swift; sourceTree = "<group>"; };
+		93B7B9881E4156C1002206C6 /* MenuParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuParser.swift; sourceTree = "<group>"; };
+		93BC88E71E5A9D6300129CF4 /* Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +39,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				938F91F51E3F8A5C000AD0DE /* PromiseKit.framework in Frameworks */,
-				938F91F61E3F8A5C000AD0DE /* Regex.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,10 +78,11 @@
 				938F91F11E3F8938000AD0DE /* Bridging-Header.h */,
 				938F91E81E3F8839000AD0DE /* Info.plist */,
 				938F91EF1E3F8902000AD0DE /* ProsGraphomenon.swift */,
-				936215391E40E7800080ED86 /* NSAlert+Promise.swift */,
-				9362153E1E4119FB0080ED86 /* ProsPreferences.swift */,
-				936215421E412BB60080ED86 /* ProsMenuEditor.swift */,
-				93B7B9881E4156C1002206C6 /* ProsMenuParser.swift */,
+				9362153E1E4119FB0080ED86 /* Preferences.swift */,
+				936215421E412BB60080ED86 /* MenuEditor.swift */,
+				93B7B9881E4156C1002206C6 /* MenuParser.swift */,
+				93BC88E71E5A9D6300129CF4 /* Template.swift */,
+				933E3D961E81AE7800700B57 /* NSAlert+Promise.swift */,
 			);
 			path = ProsGraphomenon;
 			sourceTree = "<group>";
@@ -91,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				938F91F31E3F8A5C000AD0DE /* PromiseKit.framework */,
-				938F91F41E3F8A5C000AD0DE /* Regex.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,7 +169,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/Mac/PromiseKit.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Regex.framework",
 			);
 			outputPaths = (
 			);
@@ -186,10 +184,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */,
-				9362153A1E40E7800080ED86 /* NSAlert+Promise.swift in Sources */,
-				9362153F1E4119FB0080ED86 /* ProsPreferences.swift in Sources */,
-				936215431E412BB60080ED86 /* ProsMenuEditor.swift in Sources */,
-				93B7B9891E4156C1002206C6 /* ProsMenuParser.swift in Sources */,
+				933E3D971E81AE7800700B57 /* NSAlert+Promise.swift in Sources */,
+				93BC88E81E5A9D6300129CF4 /* Template.swift in Sources */,
+				9362153F1E4119FB0080ED86 /* Preferences.swift in Sources */,
+				936215431E412BB60080ED86 /* MenuEditor.swift in Sources */,
+				93B7B9891E4156C1002206C6 /* MenuParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +281,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};

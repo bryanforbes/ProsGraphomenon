@@ -8,10 +8,13 @@
 
 import Foundation
 import PromiseKit
-import Regex
 
 internal struct Token {
 	var text: String
+}
+
+internal enum ProsError: Error {
+	case PromptCancel
 }
 
 internal func getSupportDirectory() -> URL? {
@@ -48,17 +51,25 @@ fileprivate enum CommandType {
 	case Channel
 }
 
-class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
-	var pluginPreferencesPaneMenuItemName: String = "ProsGraphomenon"
+internal func asyncMap<T, U>(items: [T], transform: @escaping (_ item: T) -> Promise<U>) -> Promise<[U]> {
+	return items.reduce(Promise(value: Array<U>()), { lastPromise, item in
+		return lastPromise.then(execute: { result in
+			return transform(item).then(execute: { transformed in
+				return result + [transformed]
+			})
+		})
+	})
+}
+
+class PrincipalClass: NSObject, THOPluginProtocol {
+	/*var pluginPreferencesPaneMenuItemName: String = "ProsGraphomenon"
 	var pluginPreferencesPaneView: NSView {
 		get {
 			return prefsController.view
 		}
 	}
 
-	fileprivate var prefsController: ProsPreferences
-	fileprivate var varsRE = "%(%)|%([^%]+)%".r!
-	fileprivate var colorsRE = try! Regex(pattern: "^color\\((\\d+)(?:, *(\\d+))?\\)$", groupNames: "fg", "bg")
+	fileprivate var prefsController: ProsPreferences*/
 
 	fileprivate var menuController: TXMenuController? {
 		get {
@@ -67,158 +78,168 @@ class ProsGraphomenonPrincipalClass: NSObject, THOPluginProtocol {
 	}
 
 	override init() {
-		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
-		prefsController = ProsPreferences(nibName: "PreferencesView", bundle: bundle)!
+		/*let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
+		prefsController = ProsPreferences(nibName: "PreferencesView", bundle: bundle)!*/
 
 		super.init()
 	}
 
 	func pluginLoadedIntoMemory() {
 		if let menu = menuController?.userControlMenu,
-			let usersItems = ProsMenuParser.read(name: "UsersMenu") {
+			let usersItems = MenuParser.parse(plist: "UsersMenu") {
 			menu.addItem(NSMenuItem.separator())
 			addMenuItems(type: .User, menu: menu, items: usersItems)
 		}
 		if let menu = menuController?.channelViewDefaultMenu,
-			let channelItems = ProsMenuParser.read(name: "ChannelMenu") {
+			let channelItems = MenuParser.parse(plist: "ChannelMenu") {
 			addMenuItems(type: .Channel, menu: menu, items: channelItems)
 		}
 	}
 
 	dynamic func handleCommand(sender: NSMenuItem) {
-		guard let (type, templates) = sender.representedObject as? (CommandType, [Any]),
+		guard let (type, templates) = sender.representedObject as? (CommandType, [Template]),
 			let client = menuController?.selectedClient,
 			let channel = menuController?.selectedChannel else {
 				return
 		}
 
-		var commands: [String]? = nil
+		var commands: Promise<[String]>? = nil
 
 		switch type {
 		case .User:
-			commands = menuController!.selectedMembers(sender).flatMap { channelUser in
-				return getCommands(templates: templates) { token -> String in
-					return getUserCommands(token: token, client: client, channel: channel, user: channelUser.user)
-				}
-			}
+			commands = asyncMap(items: menuController!.selectedMembers(sender), transform: { channelUser in
+				return self.getCommands(templates: templates, transform: { (name, parameter) in
+					if parameter != nil {
+						return self.replaceParameterized(name: name, parameter: parameter!)
+					} else {
+						return self.replaceUserVars(key: name, client: client, channel: channel, user: channelUser.user)
+					}
+				})
+			}).then(execute: { commands in
+				return commands.flatMap({ commands in commands })
+			})
 		case .Channel:
-			commands = getCommands(templates: templates) { token -> String in
-				return getChannelCommands(token: token, client: client, channel: channel)
+			commands = getCommands(templates: templates) { (name, parameter) in
+				if parameter != nil {
+					return self.replaceParameterized(name: name, parameter: parameter!)
+				} else {
+					return self.replaceChannelVars(key: name, client: client, channel: channel)
+				}
 			}
 		}
 
 		if commands != nil {
-			commands!.forEach { command in
-				performBlock(onMainThread: {
-					client.sendCommand(command)
-				})
-			}
+			let _ = commands!.then(execute: { commands in
+				self.runCommands(client: client, commands: commands)
+			}).catch(execute: { error in
+				return
+			})
 		}
 	}
 
-	fileprivate func addMenuItems(type commandType: CommandType, menu: NSMenu, items: [ ProsMenuItem ]) {
+	fileprivate func runCommands(client: IRCClient, commands: [String]) {
+		commands.forEach { command in
+			performBlock(onMainThread: {
+				client.sendCommand(command)
+			})
+		}
+	}
+
+	fileprivate func addMenuItems(type commandType: CommandType, menu: NSMenu, items: [MenuItem]) {
 		items.forEach { item in
-			if let menuItem = item as? ProsMenu {
-				let subMenu = NSMenu(title: menuItem.title)
+			switch item {
+			case .menu(let title, let items):
+				let subMenu = NSMenu(title: title)
 
-				addMenuItems(type: commandType, menu: subMenu, items: menuItem.items)
+				addMenuItems(type: commandType, menu: subMenu, items: items)
 
-				let subMenuItem = NSMenuItem(title: menuItem.title, action: nil, keyEquivalent: "")
+				let subMenuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
 				subMenuItem.submenu = subMenu
 				menu.addItem(subMenuItem)
-			} else if let commandItem = item as? ProsCommand {
-				addCommandItem(menu: menu, type: commandType, commandItem: commandItem)
-			} else if item is ProsSeparator {
+			case .command(let title, let commands):
+				let commandItem = NSMenuItem(title: title, target: self, action: #selector(PrincipalClass.handleCommand(sender:)))
+				let commandTemplates = commands.map({ command in Template(templateString: command) })
+				commandItem.representedObject = (commandType, commandTemplates)
+				menu.addItem(commandItem)
+			case .separator:
 				menu.addItem(NSMenuItem.separator())
 			}
 		}
 	}
 
-	fileprivate func addCommandItem(menu: NSMenu, type commandType: CommandType, commandItem: ProsCommand) {
-		let item = NSMenuItem(title: commandItem.title, target: self, action: #selector(ProsGraphomenonPrincipalClass.handleCommand(sender:)))
-
-		let replaced = commandItem.commands.map { command -> Any in
-			let template = command.split(using: varsRE).enumerated().map { (index, text) -> Any in
-				if index % 2 == 0 {
-					return text
-				}
-
-				switch text {
-				case "%": return text
-				case "bold": return "\u{2}"
-				case "italic": return "\u{1d}"
-				case "underline": return "\u{1f}"
-				case "end": return "\u{f}"
-				case let color where color =~ "^color\\(":
-					guard let match = colorsRE.findFirst(in: color),
-						let fg = match.group(named: "fg") else {
-							fallthrough
-					}
-
-					var bg = "0"
-
-					if let possibleBg = match.group(named: "bg") {
-						bg = possibleBg
-					}
-
-					return "\u{3}\(fg),\(bg)"
-				default:
-					return Token(text: text)
-				}
-			}
-
-			if let strings = template as? [String] {
-				return strings.joined(separator: "")
-			}
-
-			return template
-		}
-
-		item.representedObject = (commandType, replaced)
-		menu.addItem(item)
+	fileprivate func getCommands(templates: [Template], transform: @escaping (String, String?) -> Promise<String?>) -> Promise<[String]> {
+		return asyncMap(items: templates, transform: { template in
+			return template.render(callback: transform)
+		})
 	}
 
-	fileprivate func getCommands(templates: [Any], transform: (Token) -> String) -> [String] {
-		if let strings = templates as? [String] {
-			return strings
-		}
+	fileprivate func replaceParameterized(name: String, parameter: String) -> Promise<String?> {
+		var value: String? = nil
 
-		return templates.map { template -> String in
-			guard let parts = template as? [Any] else {
-				return template as! String
+		switch name {
+		case "color":
+			let colors = parameter.components(separatedBy: ",").map({ c in c.trimmingCharacters(in: .whitespaces) })
+			if colors.count > 0 {
+				let fg = colors[0]
+				let bg = colors.count > 1 ? colors[1] : "0"
+
+				value = "\u{3}\(fg),\(bg)"
 			}
+		case "prompt":
+			return displayCommandPrompt(messageText: parameter)
+		default:
+			break
+		}
 
-			let transformed = parts.map { part -> String in
-				guard let token = part as? Token else {
-					return part as! String
-				}
+		return Promise(value: value)
+	}
 
-				return transform(token)
+	fileprivate func replaceUserVars(key: String, client: IRCClient, channel: IRCChannel, user: IRCUser) -> Promise<String?> {
+		var value: String? = nil
+
+		switch key {
+		case "user": value = user.nickname
+		case "banmask": value = user.banMask
+		default: return self.replaceCommonVars(key: key, client: client, channel: channel)
+		}
+
+		return Promise(value: value)
+	}
+
+	fileprivate func replaceChannelVars(key: String, client: IRCClient, channel: IRCChannel) -> Promise<String?> {
+		return self.replaceCommonVars(key: key, client: client, channel: channel)
+	}
+
+	fileprivate func replaceCommonVars(key: String, client: IRCClient, channel: IRCChannel) -> Promise<String?> {
+		var value: String? = nil
+
+		switch key {
+		case "bold": value = "\u{2}"
+		case "italic": value = "\u{1d}"
+		case "underline": value = "\u{1f}"
+		case "end": value = "\u{f}"
+		case "channel": value = channel.name
+		case "me": value = client.userNickname
+		default: break
+		}
+
+		return Promise(value: value)
+	}
+
+	fileprivate func displayCommandPrompt(messageText: String) -> Promise<String?> {
+		let alert = NSAlert()
+		alert.messageText = messageText
+		alert.addButton(withTitle: "Ok")
+		alert.addButton(withTitle: "Cancel")
+
+		let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+		alert.accessoryView = input
+
+		return alert.beginSheetModal(for: masterController().mainWindow).then(execute: { response -> String in
+			if response != NSAlertFirstButtonReturn {
+				throw ProsError.PromptCancel
 			}
-
-			return transformed.joined(separator: "")
-		}
-	}
-
-	fileprivate func getUserCommands(token: Token, client: IRCClient, channel: IRCChannel, user: IRCUser) -> String {
-		switch token.text {
-		case "user": return user.nickname
-		case "banmask": return user.banMask
-		default: return replaceCommonVars(token: token, client: client, channel: channel)
-		}
-	}
-
-	fileprivate func getChannelCommands(token: Token, client: IRCClient, channel: IRCChannel) -> String {
-		switch token.text {
-		default: return replaceCommonVars(token: token, client: client, channel: channel)
-		}
-	}
-
-	fileprivate func replaceCommonVars(token: Token, client: IRCClient, channel: IRCChannel) -> String {
-		switch token.text {
-		case "channel": return channel.name
-		case "me": return client.userNickname
-		default: return "Token(\(token.text))"
-		}
+			return input.stringValue
+		})
 	}
 }

@@ -15,14 +15,14 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>MinimumTextualVersion</key>
+	<string>6.0.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Bryan Forbes. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>ProsGraphomenon.ProsGraphomenonPrincipalClass</string>
-	<key>MinimumTextualVersion</key>
-	<string>6.0.0</string>
+	<string>ProsGraphomenon.PrincipalClass</string>
 </dict>
 </plist>

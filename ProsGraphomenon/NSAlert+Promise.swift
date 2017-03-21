@@ -11,8 +11,12 @@ import PromiseKit
 
 extension NSAlert {
 	func beginSheetModal(for window: NSWindow) -> Promise<NSModalResponse> {
-		return PromiseKit.wrap {
-			self.beginSheetModal(for: window, completionHandler: $0)
-		}
+		return Promise(resolvers: { resolve, _ in
+			DispatchQueue.main.async {
+				self.beginSheetModal(for: window, completionHandler: { response in
+					resolve(response)
+				})
+			}
+		})
 	}
 }

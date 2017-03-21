@@ -1,5 +1,5 @@
 //
-//  ProsMenuEditor.swift
+//  MenuEditor.swift
 //  ProsGraphomenon
 //
 //  Created by Bryan Forbes on 1/31/17.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ProsMenuEditor: NSViewController {
+class MenuEditor: NSViewController {
 	@IBOutlet weak var outline: NSOutlineView!
 
 	@IBOutlet weak var titleField: NSTextField!
@@ -19,7 +19,7 @@ class ProsMenuEditor: NSViewController {
 
 	var plistName: String?
 
-	var menuData: [ ProsMenuItem ] = []
+	var menuData: [MenuItem] = []
 
 	var commandsViewEnabled: Bool {
 		get {
@@ -69,7 +69,7 @@ class ProsMenuEditor: NSViewController {
 	override func viewWillAppear() {
 		super.viewWillAppear()
 
-		if plistName != nil, let items = ProsMenuParser.read(name: plistName!) {
+		if plistName != nil, let items = MenuParser.parse(plist: plistName!) {
 			menuData = items
 		} else {
 			menuData = []
@@ -92,9 +92,14 @@ class ProsMenuEditor: NSViewController {
 		}*/
 	}
 
-	fileprivate func addNewItem(item: ProsMenuItem, index: Int, parent: ProsMenu?) {
+	fileprivate func addNewItem(item: MenuItem, index: Int, parent: MenuItem?) {
 		if parent != nil {
-			parent!.items.insert(item, at: index)
+			switch parent! {
+			case .menu(_, var items):
+				items.insert(item, at: index)
+			default:
+				break
+			}
 		} else {
 			menuData.insert(item, at: index)
 		}
@@ -104,18 +109,18 @@ class ProsMenuEditor: NSViewController {
 	@IBAction func onAddMenu(_ sender: NSMenuItem) {
 		let outlineItem = outline.item(atRow: outline.selectedRow)
 
-		let newMenu = ProsMenu(title: "New Menu")
+		let newMenu = MenuItem.menu(title: "New Menu", items: [])
 
 		outline.beginUpdates()
 
-		var parent: ProsMenu?
+		var parent: MenuItem?
 		var index = 0
 
-		if let item = outlineItem as? ProsMenuItem {
+		if let item = outlineItem as? MenuItem {
 			if outline.isItemExpanded(item) {
-				parent = item as? ProsMenu
+				parent = item
 			} else {
-				parent = outline.parent(forItem: item) as? ProsMenu
+				parent = outline.parent(forItem: item) as? MenuItem
 				index = outline.childIndex(forItem: item) + 1
 			}
 		}
@@ -132,18 +137,20 @@ class ProsMenuEditor: NSViewController {
 	}
 }
 
-extension ProsMenuEditor: NSOutlineViewDelegate {
+extension MenuEditor: NSOutlineViewDelegate {
 	func outlineView(_ outlineView: NSOutlineView, isGroupItem item: Any) -> Bool {
 		return false
 	}
 
 	func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
-		if let menuItem = item as? ProsMenuItem {
+		if let menuItem = item as? MenuItem {
 			let cell = outlineView.make(withIdentifier: "itemCell", owner: self) as! NSTableCellView
 
-			if let titledItem = menuItem as? ProsMenuItemTitled {
-				cell.textField?.stringValue = titledItem.title
-			} else {
+			switch menuItem {
+			case .command(let title, _),
+			     .menu(let title, _):
+				cell.textField?.stringValue = title
+			case .separator:
 				cell.textField?.stringValue = "-"
 			}
 
@@ -155,22 +162,26 @@ extension ProsMenuEditor: NSOutlineViewDelegate {
 	func outlineViewSelectionDidChange(_ notification: Notification) {
 		let outlineItem = outline.item(atRow: outline.selectedRow)
 
-		if let item = outlineItem as? ProsMenuItem {
+		if let menuItem = outlineItem as? MenuItem {
 			removeButton.isEnabled = true
 
-			if let titled = item as? ProsMenuItemTitled {
+			switch menuItem {
+			case .command(let title, _),
+			     .menu(let title, _):
 				titleField.isEnabled = true
-				titleField.stringValue = titled.title
+				titleField.stringValue = title
+				commandsView.breakUndoCoalescing()
+			default:
+				break
+			}
 
-				if let command = item as? ProsCommand {
-					commandsView.breakUndoCoalescing()
-					commandsView.string = command.commands.joined(separator: "\n")
-					commandsViewEnabled = true
-				} else {
-					commandsView.breakUndoCoalescing()
-					commandsView.string = ""
-					commandsViewEnabled = false
-				}
+			switch menuItem {
+			case .command(_, let commands):
+				commandsView.string = commands.joined(separator: "\n")
+				commandsViewEnabled = true
+			default:
+				commandsView.string = ""
+				commandsViewEnabled = false
 			}
 		} else {
 			removeButton.isEnabled = false
@@ -183,17 +194,27 @@ extension ProsMenuEditor: NSOutlineViewDelegate {
 	}
 }
 
-extension ProsMenuEditor: NSOutlineViewDataSource {
+extension MenuEditor: NSOutlineViewDataSource {
 	func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
-		if item is ProsMenu {
-			return true
+		if let menuItem = item as? MenuItem {
+			switch menuItem {
+			case .menu(_, _):
+				return true
+			default:
+				break
+			}
 		}
 		return false
 	}
 
 	func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-		if let menu = item as? ProsMenu {
-			return menu.items.count;
+		if let menuItem = item as? MenuItem {
+			switch menuItem {
+			case .menu(_, let items):
+				return items.count
+			default:
+				break
+			}
 		} else if item == nil {
 			return menuData.count
 		}
@@ -201,8 +222,13 @@ extension ProsMenuEditor: NSOutlineViewDataSource {
 	}
 
 	func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-		if let menu = item as? ProsMenu {
-			return menu.items[index]
+		if let menuItem = item as? MenuItem {
+			switch menuItem {
+			case .menu(_, let items):
+				return items[index]
+			default:
+				break
+			}
 		}
 		return menuData[index]
 	}
