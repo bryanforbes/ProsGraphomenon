@@ -6,19 +6,20 @@ A plugin for [Textual](https://www.codeux.com/textual/) to add mIRC-like scripti
 
 * Customizable menus for the channel users list and channel view
 * Executing multiple commands for users and channels from one menu item
+* Ability to prompt the user for input
 
 ## TODO
 
-* Prompting the user for input
 * Aliases
 * Command/alias editor
+* Tests
 
 ## Building
 
 * Clone this repository
 * Run `carthage bootstrap --platform macOS`
 * Open `ProsGraphomenon.xcodeproj` in Xcode
-* Build the project (`Projects -> Build` or `⌘ B`
+* Build the project (`Projects -> Build` or `⌘ B`)
 * Right click on `ProsGraphomenon.bundle` in the Project Navigator and select `Show in Finder`
 * Double click `ProsGraphomenon.bundle` in Finder
 * Restart Textual
