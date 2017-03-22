@@ -180,10 +180,13 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		case "color":
 			let colors = parameter.components(separatedBy: ",").map({ c in c.trimmingCharacters(in: .whitespaces) })
 			if colors.count > 0 {
-				let fg = colors[0]
-				let bg = colors.count > 1 ? colors[1] : "0"
+				let fg = Int(colors[0])!
+				value = String(format: "\u{3}%02d", fg)
 
-				value = "\u{3}\(fg),\(bg)"
+				if colors.count > 1 {
+					let bg = Int(colors[1])!
+					value = String(format: "\(value!),%02d", bg)
+				}
 			}
 		case "prompt":
 			return displayCommandPrompt(messageText: parameter)
@@ -218,6 +221,7 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		case "italic": value = "\u{1d}"
 		case "underline": value = "\u{1f}"
 		case "end": value = "\u{f}"
+		case "color": value = "\u{3}"
 		case "channel": value = channel.name
 		case "me": value = client.userNickname
 		default: break
@@ -227,19 +231,24 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 	}
 
 	fileprivate func displayCommandPrompt(messageText: String) -> Promise<String?> {
-		let alert = NSAlert()
-		alert.messageText = messageText
-		alert.addButton(withTitle: "Ok")
-		alert.addButton(withTitle: "Cancel")
+		return Promise(resolvers: { resolve, reject in
+			DispatchQueue.main.async {
+				let alert = NSAlert()
+				alert.messageText = messageText
+				alert.addButton(withTitle: "Ok")
+				alert.addButton(withTitle: "Cancel")
 
-		let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-		alert.accessoryView = input
+				let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+				alert.accessoryView = input
 
-		return alert.beginSheetModal(for: masterController().mainWindow).then(execute: { response -> String in
-			if response != NSAlertFirstButtonReturn {
-				throw ProsError.PromptCancel
+				alert.beginSheetModal(for: self.masterController().mainWindow, completionHandler: { response in
+					if response == NSAlertFirstButtonReturn {
+						resolve(input.stringValue)
+					} else {
+						reject(ProsError.PromptCancel)
+					}
+				})
 			}
-			return input.stringValue
 		})
 	}
 }

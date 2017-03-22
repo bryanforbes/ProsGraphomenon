@@ -29,6 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "938F91E41E3F8839000AD0DE"
+            BuildableName = "ProsGraphomenon.bundle"
+            BlueprintName = "ProsGraphomenon"
+            ReferencedContainer = "container:ProsGraphomenon.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

@@ -53,7 +53,10 @@ fileprivate class TemplateParser {
 		let advanceEscaped = { (character: Character) -> Bool in
 			if character == "\\" {
 				let next = templateString.index(after: index)
-				if atString(next, delimiters.start) {
+				if atString(next, "\\") {
+					index = templateString.index(next, offsetBy: 1)
+					return true
+				} else if atString(next, delimiters.start) {
 					index = templateString.index(next, offsetBy: delimiters.startLength)
 					return true
 				} else if atString(next, delimiters.end) {
@@ -164,7 +167,11 @@ fileprivate enum TemplateASTNode {
 	case parameterizedNode(String, String)
 
 	static func text(text: String, delimiters: VariableDelimiters) -> TemplateASTNode {
-		return .textNode(text.replacingOccurrences(of: "\\\(delimiters.start)", with: delimiters.start).replacingOccurrences(of: "\\\(delimiters.end)", with: delimiters.end))
+		return .textNode(
+			text.replacingOccurrences(of: "\\\(delimiters.start)", with: delimiters.start)
+				.replacingOccurrences(of: "\\\(delimiters.end)", with: delimiters.end)
+				.replacingOccurrences(of: "\\\\", with: "\\")
+		)
 	}
 
 	static func substitution(name: String) -> TemplateASTNode {
