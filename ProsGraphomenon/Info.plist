@@ -23,6 +23,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Bryan Forbes. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>ProsGraphomenon.PrincipalClass</string>
+	<string>$(PRODUCT_NAME).PrincipalClass</string>
 </dict>
 </plist>

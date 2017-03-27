@@ -69,7 +69,13 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		}
 	}
 
-	fileprivate var prefsController: ProsPreferences*/
+	fileprivate var prefsController: Preferences*/
+
+	var subscribedUserInputCommands: [String] {
+		get {
+			return ["say"]
+		}
+	}
 
 	fileprivate var menuController: TXMenuController? {
 		get {
@@ -77,12 +83,12 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		}
 	}
 
-	override init() {
-		/*let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
-		prefsController = ProsPreferences(nibName: "PreferencesView", bundle: bundle)!*/
+	/*override init() {
+		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
+		prefsController = Preferences(nibName: "PreferencesView", bundle: bundle)!
 
 		super.init()
-	}
+	}*/
 
 	func pluginLoadedIntoMemory() {
 		if let menu = menuController?.userControlMenu,
@@ -92,7 +98,18 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		}
 		if let menu = menuController?.channelViewDefaultMenu,
 			let channelItems = MenuParser.parse(plist: "ChannelMenu") {
+			menu.addItem(NSMenuItem.separator())
 			addMenuItems(type: .Channel, menu: menu, items: channelItems)
+		}
+	}
+
+	func userInputCommandInvoked(on client: IRCClient, command commandString: String, messageString: String) {
+		let mainWindow = masterController().mainWindow
+
+		if commandString == "SAY" {
+			performBlock(onMainThread: {
+				client.sendPrivmsg(messageString, to: mainWindow.selectedChannel!)
+			})
 		}
 	}
 
