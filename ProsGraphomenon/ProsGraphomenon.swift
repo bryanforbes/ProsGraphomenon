@@ -62,14 +62,14 @@ internal func asyncMap<T, U>(items: [T], transform: @escaping (_ item: T) -> Pro
 }
 
 class PrincipalClass: NSObject, THOPluginProtocol {
-	/*var pluginPreferencesPaneMenuItemName: String = "ProsGraphomenon"
+	var pluginPreferencesPaneMenuItemName: String = "ProsGraphomenon"
 	var pluginPreferencesPaneView: NSView {
 		get {
 			return prefsController.view
 		}
 	}
 
-	fileprivate var prefsController: Preferences*/
+	fileprivate var prefsController: Preferences
 
 	var subscribedUserInputCommands: [String] {
 		get {
@@ -83,12 +83,12 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 		}
 	}
 
-	/*override init() {
+	override init() {
 		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
 		prefsController = Preferences(nibName: "PreferencesView", bundle: bundle)!
 
 		super.init()
-	}*/
+	}
 
 	func pluginLoadedIntoMemory() {
 		if let menu = menuController?.userControlMenu,
