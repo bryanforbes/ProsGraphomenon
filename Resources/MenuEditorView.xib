@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="ProsMenuEditor" customModule="ProsGraphomenon" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="MenuEditor" customModule="ProsGraphomenon" customModuleProvider="target">
             <connections>
                 <outlet property="addButton" destination="DeJ-Ih-qhM" id="UyK-ue-Gjd"/>
                 <outlet property="addMenu" destination="FiN-EO-8NM" id="3am-de-Z1X"/>
