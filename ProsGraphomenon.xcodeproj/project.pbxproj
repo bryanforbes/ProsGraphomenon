@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9302E9B61E8BFC8D0077AF4B /* BundleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9302E9B51E8BFC8D0077AF4B /* BundleViewController.swift */; };
 		9362153C1E4119820080ED86 /* PreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9362153B1E4119820080ED86 /* PreferencesView.xib */; };
 		9362153F1E4119FB0080ED86 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9362153E1E4119FB0080ED86 /* Preferences.swift */; };
 		936215411E4120030080ED86 /* MenuEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936215401E4120030080ED86 /* MenuEditorView.xib */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9302E9B51E8BFC8D0077AF4B /* BundleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BundleViewController.swift; sourceTree = "<group>"; };
 		9362153B1E4119820080ED86 /* PreferencesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferencesView.xib; path = Resources/PreferencesView.xib; sourceTree = "<group>"; };
 		9362153E1E4119FB0080ED86 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		936215401E4120030080ED86 /* MenuEditorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuEditorView.xib; path = Resources/MenuEditorView.xib; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				936215421E412BB60080ED86 /* MenuEditor.swift */,
 				93B7B9881E4156C1002206C6 /* MenuParser.swift */,
 				93BC88E71E5A9D6300129CF4 /* Template.swift */,
+				9302E9B51E8BFC8D0077AF4B /* BundleViewController.swift */,
 			);
 			path = ProsGraphomenon;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 			files = (
 				938F91F01E3F8902000AD0DE /* ProsGraphomenon.swift in Sources */,
 				93BC88E81E5A9D6300129CF4 /* Template.swift in Sources */,
+				9302E9B61E8BFC8D0077AF4B /* BundleViewController.swift in Sources */,
 				9362153F1E4119FB0080ED86 /* Preferences.swift in Sources */,
 				936215431E412BB60080ED86 /* MenuEditor.swift in Sources */,
 				93DBDDD91E8AB95600EF0DE5 /* CommandEditor.swift in Sources */,

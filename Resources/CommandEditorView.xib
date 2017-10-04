@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
@@ -10,6 +10,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CommandEditor" customModule="ProsGraphomenon" customModuleProvider="target">
             <connections>
+                <outlet property="banMaskField" destination="dPK-dA-Yky" id="Lgi-sH-4xh"/>
                 <outlet property="boldTokenField" destination="2Y0-g4-cmA" id="3lM-ih-Uew"/>
                 <outlet property="channelTokenField" destination="CS4-Or-WuE" id="Oly-Jw-8xD"/>
                 <outlet property="colorTokenField" destination="LxF-Hr-3Ds" id="lyi-HM-GXv"/>
@@ -18,39 +19,43 @@
                 <outlet property="meTokenField" destination="dAK-HO-2cI" id="XhL-RA-wIP"/>
                 <outlet property="promptTokenField" destination="Rf0-Tc-MjB" id="9Jk-PH-6kw"/>
                 <outlet property="resetTokenField" destination="zec-YC-bhV" id="k7G-zy-zXG"/>
-                <outlet property="titleTextField" destination="8hU-W0-7lN" id="T4c-EY-wja"/>
+                <outlet property="titleTextField" destination="qK8-ac-ehj" id="Kf8-Cy-Gsu"/>
                 <outlet property="underlineTokenField" destination="g0m-Xx-mfK" id="dz2-kT-O7f"/>
+                <outlet property="userField" destination="1Ig-18-5H4" id="pgz-FH-xAX"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe">
-            <rect key="frame" x="0.0" y="0.0" width="692" height="479"/>
+            <rect key="frame" x="0.0" y="0.0" width="653" height="552"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <stackView focusRingType="none" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wob-eL-YCa">
-                    <rect key="frame" x="20" y="20" width="652" height="439"/>
+                <stackView autoresizesSubviews="NO" focusRingType="none" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="250" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wob-eL-YCa">
+                    <rect key="frame" x="20" y="20" width="613" height="512"/>
                     <subviews>
-                        <stackView focusRingType="none" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IQm-J4-8Ly">
-                            <rect key="frame" x="0.0" y="417" width="652" height="22"/>
+                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZQ-Gz-QGu">
+                            <rect key="frame" x="0.0" y="490" width="613" height="22"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXU-68-1Vg">
-                                    <rect key="frame" x="-2" y="5" width="37" height="17"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="dQz-la-Dxv">
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aj7-3G-2ei">
+                                    <rect key="frame" x="-2" y="2.5" width="35" height="17"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Title:" id="R2Z-Sy-H01">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hU-W0-7lN">
-                                    <rect key="frame" x="41" y="0.0" width="611" height="22"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="GhR-w0-YEb">
+                                <textField horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qK8-ac-ehj">
+                                    <rect key="frame" x="39" y="0.0" width="574" height="22"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="A5n-xf-adF">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
                             </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="aZn-SM-MYN"/>
+                            </constraints>
                             <visibilityPriorities>
                                 <integer value="1000"/>
                                 <integer value="1000"/>
@@ -61,18 +66,15 @@
                             </customSpacing>
                         </stackView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDW-xe-3CY">
-                            <rect key="frame" x="-2" y="392" width="37" height="17"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="2bc-Cc-w3S">
+                            <rect key="frame" x="-2" y="465" width="77" height="17"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Commands:" id="2bc-Cc-w3S">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <tokenField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GxL-uS-A8p">
-                            <rect key="frame" x="0.0" y="164" width="652" height="220"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="220" id="vbv-ie-F01"/>
-                            </constraints>
+                        <tokenField horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GxL-uS-A8p">
+                            <rect key="frame" x="0.0" y="164" width="613" height="293"/>
                             <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" id="7aZ-sH-F57">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -82,13 +84,13 @@
                                 <outlet property="delegate" destination="-2" id="zaO-7q-VvR"/>
                             </connections>
                         </tokenField>
-                        <box title="Formatting" translatesAutoresizingMaskIntoConstraints="NO" id="zTH-WO-xWU">
-                            <rect key="frame" x="-3" y="78" width="658" height="78"/>
+                        <box horizontalCompressionResistancePriority="250" title="Formatting" translatesAutoresizingMaskIntoConstraints="NO" id="zTH-WO-xWU">
+                            <rect key="frame" x="-3" y="78" width="619" height="78"/>
                             <view key="contentView" id="vvG-ob-hFu">
-                                <rect key="frame" x="2" y="2" width="654" height="61"/>
+                                <rect key="frame" x="2" y="2" width="615" height="61"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Y0-g4-cmA">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Y0-g4-cmA">
                                         <rect key="frame" x="18" y="20" width="73" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Bold" allowsEditingTextAttributes="YES" id="cOe-Ig-12H">
@@ -97,7 +99,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ijk-Xh-wBL">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ijk-Xh-wBL">
                                         <rect key="frame" x="95" y="20" width="71" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Italic" allowsEditingTextAttributes="YES" id="cRM-Ue-N2h">
@@ -106,7 +108,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0m-Xx-mfK">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0m-Xx-mfK">
                                         <rect key="frame" x="170" y="20" width="100" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Underline" allowsEditingTextAttributes="YES" id="tCI-6T-etE">
@@ -115,7 +117,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LxF-Hr-3Ds">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LxF-Hr-3Ds">
                                         <rect key="frame" x="274" y="20" width="74" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Color" allowsEditingTextAttributes="YES" id="8Ny-rn-1ga">
@@ -124,7 +126,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zec-YC-bhV">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zec-YC-bhV">
                                         <rect key="frame" x="352" y="20" width="76" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Reset" allowsEditingTextAttributes="YES" id="p7A-ph-9y7">
@@ -139,13 +141,13 @@
                                 <constraint firstAttribute="height" constant="74" id="mFX-Fq-jMI"/>
                             </constraints>
                         </box>
-                        <box title="Fields" translatesAutoresizingMaskIntoConstraints="NO" id="J1i-rv-pWi">
-                            <rect key="frame" x="-3" y="-4" width="658" height="78"/>
+                        <box horizontalCompressionResistancePriority="250" title="Fields" translatesAutoresizingMaskIntoConstraints="NO" id="J1i-rv-pWi">
+                            <rect key="frame" x="-3" y="-4" width="619" height="78"/>
                             <view key="contentView" id="9d5-DL-bbD">
-                                <rect key="frame" x="2" y="2" width="654" height="61"/>
+                                <rect key="frame" x="2" y="2" width="615" height="61"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CS4-Or-WuE">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CS4-Or-WuE">
                                         <rect key="frame" x="18" y="24" width="130" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Channel Name" allowsEditingTextAttributes="YES" id="xDk-BZ-JQZ">
@@ -154,7 +156,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dAK-HO-2cI">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dAK-HO-2cI">
                                         <rect key="frame" x="152" y="24" width="124" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="My Nickname" allowsEditingTextAttributes="YES" id="cz5-mR-UfY">
@@ -163,10 +165,28 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </tokenFieldCell>
                                     </tokenField>
-                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rf0-Tc-MjB">
+                                    <tokenField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rf0-Tc-MjB">
                                         <rect key="frame" x="280" y="24" width="88" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Prompt" allowsEditingTextAttributes="YES" id="UPV-q9-rUj">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </tokenFieldCell>
+                                    </tokenField>
+                                    <tokenField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Ig-18-5H4">
+                                        <rect key="frame" x="372" y="24" width="72" height="17"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="User" allowsEditingTextAttributes="YES" id="QAA-or-kp3">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </tokenFieldCell>
+                                    </tokenField>
+                                    <tokenField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dPK-dA-Yky">
+                                        <rect key="frame" x="448" y="24" width="104" height="17"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <tokenFieldCell key="cell" selectable="YES" editable="YES" allowsUndo="NO" alignment="left" title="Ban mask" allowsEditingTextAttributes="YES" id="11w-qI-9Oj">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -180,14 +200,14 @@
                         </box>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="IQm-J4-8Ly" secondAttribute="trailing" id="L6N-SF-pt7"/>
-                        <constraint firstAttribute="trailing" secondItem="J1i-rv-pWi" secondAttribute="trailing" id="M7H-Tq-32h"/>
-                        <constraint firstItem="zTH-WO-xWU" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="XYH-7q-6dn"/>
-                        <constraint firstItem="J1i-rv-pWi" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="bjT-X7-g6V"/>
-                        <constraint firstItem="GxL-uS-A8p" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="i8I-e6-phC"/>
-                        <constraint firstAttribute="trailing" secondItem="GxL-uS-A8p" secondAttribute="trailing" id="o5G-ew-SBh"/>
-                        <constraint firstItem="IQm-J4-8Ly" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="rjh-38-ms8"/>
-                        <constraint firstAttribute="trailing" secondItem="zTH-WO-xWU" secondAttribute="trailing" id="w5v-Sr-FD2"/>
+                        <constraint firstItem="GxL-uS-A8p" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="6Rc-5D-dtj"/>
+                        <constraint firstItem="J1i-rv-pWi" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="7Ph-s6-u99"/>
+                        <constraint firstAttribute="trailing" secondItem="zTH-WO-xWU" secondAttribute="trailing" id="YXA-gM-vJQ"/>
+                        <constraint firstAttribute="trailing" secondItem="uZQ-Gz-QGu" secondAttribute="trailing" id="edf-hW-fFo"/>
+                        <constraint firstItem="uZQ-Gz-QGu" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="iaJ-0c-Ejz"/>
+                        <constraint firstItem="zTH-WO-xWU" firstAttribute="leading" secondItem="Wob-eL-YCa" secondAttribute="leading" id="lfm-TC-XEJ"/>
+                        <constraint firstAttribute="trailing" secondItem="GxL-uS-A8p" secondAttribute="trailing" id="msP-Yc-w7S"/>
+                        <constraint firstAttribute="trailing" secondItem="J1i-rv-pWi" secondAttribute="trailing" id="yYE-S8-3rg"/>
                     </constraints>
                     <visibilityPriorities>
                         <integer value="1000"/>
@@ -206,14 +226,12 @@
                 </stackView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="Wob-eL-YCa" secondAttribute="trailing" constant="20" id="0aU-vJ-aC4"/>
-                <constraint firstAttribute="trailing" secondItem="Wob-eL-YCa" secondAttribute="trailing" constant="20" id="6LB-I3-CZl"/>
-                <constraint firstItem="Wob-eL-YCa" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="PIH-xg-XhS"/>
-                <constraint firstItem="Wob-eL-YCa" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="20" id="Y1Z-Rz-i6R"/>
-                <constraint firstItem="Wob-eL-YCa" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="dPg-rC-Ocr"/>
-                <constraint firstAttribute="bottom" secondItem="Wob-eL-YCa" secondAttribute="bottom" constant="20" id="flY-ES-CA0"/>
+                <constraint firstItem="Wob-eL-YCa" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" symbolic="YES" id="2aJ-lL-RS0"/>
+                <constraint firstAttribute="bottom" secondItem="Wob-eL-YCa" secondAttribute="bottom" constant="20" id="87b-0h-WVh"/>
+                <constraint firstItem="Wob-eL-YCa" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="20" id="Zbn-qQ-cRN"/>
+                <constraint firstAttribute="trailing" secondItem="Wob-eL-YCa" secondAttribute="trailing" constant="20" id="fKi-Mt-gxS"/>
             </constraints>
-            <point key="canvasLocation" x="245" y="296.5"/>
+            <point key="canvasLocation" x="-59.5" y="-80"/>
         </customView>
     </objects>
 </document>

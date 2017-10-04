@@ -20,13 +20,37 @@ class CommandEditor: NSViewController {
 	@IBOutlet weak var colorTokenField: NSTokenField!
 	@IBOutlet weak var resetTokenField: NSTokenField!
 	@IBOutlet weak var promptTokenField: NSTokenField!
+	@IBOutlet weak var userField: NSTokenField!
+	@IBOutlet weak var banMaskField: NSTokenField!
 
-	class func create() -> CommandEditor? {
-		if let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon"),
-			let editor = CommandEditor(nibName: "CommandEditorView", bundle: bundle) {
-			return editor
-		}
-		return nil
+	let type: Type;
+
+	enum `Type` {
+		case Channel
+		case User
+	}
+
+	init?(type: Type) {
+		self.type = type
+
+		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")
+
+		super.init(nibName: "CommandEditorView", bundle: bundle!)
+	}
+
+	required init?(coder: NSCoder) {
+		self.type = .Channel
+
+		super.init(coder: coder)
+	}
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+
+		commandsTokenField.font = NSFont.userFixedPitchFont(ofSize: 0)
+
+		userField.isHidden = type != .User
+		banMaskField.isHidden = type != .User
 	}
 }
 
