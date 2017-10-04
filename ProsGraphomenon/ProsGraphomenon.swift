@@ -18,7 +18,7 @@ internal enum ProsError: Error {
 }
 
 internal func getSupportDirectory() -> URL? {
-	guard let path = TPCPathInfo.applicationSupportFolderPathInLocalContainer() else {
+	guard let path = TPCPathInfo.applicationSupport else {
 		return nil
 	}
 
@@ -73,7 +73,7 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 
 	var subscribedUserInputCommands: [String] {
 		get {
-			return ["say"]
+			return ["say", "prosgraphdir"]
 		}
 	}
 
@@ -111,9 +111,15 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 				client.sendPrivmsg(messageString, to: mainWindow.selectedChannel!)
 			})
 		}
+
+		if commandString == "PROSGRAPHDIR" {
+			performBlock(onMainThread: {
+				client.sendPrivmsg(getSupportDirectory()!.path, to: mainWindow.selectedChannel!)
+			})
+		}
 	}
 
-	dynamic func handleCommand(sender: NSMenuItem) {
+	@objc dynamic func handleCommand(sender: NSMenuItem) {
 		guard let (type, templates) = sender.representedObject as? (CommandType, [Template]),
 			let client = menuController?.selectedClient,
 			let channel = menuController?.selectedChannel else {
@@ -259,7 +265,7 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 				alert.accessoryView = input
 
 				alert.beginSheetModal(for: self.masterController().mainWindow, completionHandler: { response in
-					if response == NSAlertFirstButtonReturn {
+					if response == NSApplication.ModalResponse.alertFirstButtonReturn {
 						resolve(input.stringValue)
 					} else {
 						reject(ProsError.PromptCancel)

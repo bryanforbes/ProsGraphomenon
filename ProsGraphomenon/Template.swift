@@ -44,7 +44,7 @@ fileprivate class TemplateParser {
 			guard let string = string else {
 				return false
 			}
-			return templateString.substring(from: index).hasPrefix(string)
+			return templateString[index...].hasPrefix(string)
 		}
 
 		var index = templateString.startIndex
@@ -87,11 +87,11 @@ fileprivate class TemplateParser {
 				if character == ":" {
 					let name = templateString[startIndex..<index]
 					index = templateString.index(after: index)
-					state = .parameterized(startIndex: index, name: name)
+					state = .parameterized(startIndex: index, name: String(name))
 					continue
 				} else if atString(index, delimiters.end) {
 					if startIndex != index {
-						nodes.append(TemplateASTNode.substitution(name: templateString[startIndex..<index]))
+						nodes.append(TemplateASTNode.substitution(name: String(templateString[startIndex..<index])))
 					}
 					index = templateString.index(index, offsetBy: delimiters.endLength)
 					state = .start
@@ -102,7 +102,7 @@ fileprivate class TemplateParser {
 			case .parameterized(let startIndex, let name):
 				if atString(index, delimiters.end) {
 					if startIndex != index {
-						nodes.append(TemplateASTNode.parameterized(name: name, parameter: templateString[startIndex..<index]))
+						nodes.append(TemplateASTNode.parameterized(name: name, parameter: String(templateString[startIndex..<index])))
 					}
 					index = templateString.index(index, offsetBy: delimiters.endLength)
 					state = .start
@@ -113,7 +113,7 @@ fileprivate class TemplateParser {
 			case .text(let startIndex):
 				if atString(index, delimiters.start) {
 					if startIndex != index {
-						nodes.append(TemplateASTNode.text(text: templateString[startIndex..<index], delimiters: delimiters))
+						nodes.append(TemplateASTNode.text(text: String(templateString[startIndex..<index]), delimiters: delimiters))
 					}
 					index = templateString.index(index, offsetBy: delimiters.startLength)
 					state = .substitution(startIndex: index)
@@ -130,7 +130,7 @@ fileprivate class TemplateParser {
 		case .start:
 			break
 		case .text(let startIndex):
-			nodes.append(TemplateASTNode.text(text: templateString[startIndex..<endIndex], delimiters: delimiters))
+			nodes.append(TemplateASTNode.text(text: String(templateString[startIndex..<endIndex]), delimiters: delimiters))
 		default:
 			break
 		}

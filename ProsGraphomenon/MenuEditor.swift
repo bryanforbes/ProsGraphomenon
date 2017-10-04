@@ -38,7 +38,7 @@ class MenuEditor: NSViewController {
 
 		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
 		
-		super.init(nibName: "MenuEditorView", bundle: bundle)
+		super.init(nibName: NSNib.Name(rawValue: "MenuEditorView"), bundle: bundle)
 	}
 	
 	required init?(coder: NSCoder) {
@@ -60,7 +60,7 @@ class MenuEditor: NSViewController {
 		commandsView.textContainer!.containerSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
 		commandsView.textContainer!.widthTracksTextView = false
 		commandsView.textContainer!.heightTracksTextView = false
-		commandsView.autoresizingMask = .viewNotSizable
+		commandsView.autoresizingMask = NSView.AutoresizingMask.none
 		commandsView.maxSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
 		commandsView.isHorizontallyResizable = true
 		commandsView.isVerticallyResizable = true
@@ -79,7 +79,7 @@ class MenuEditor: NSViewController {
 	}
 
 	@IBAction func onAddClick(_ sender: NSButton) {
-		if let event = NSApplication.shared().currentEvent {
+		if let event = NSApplication.shared.currentEvent {
 			NSMenu.popUpContextMenu(addMenu, with: event, for: sender)
 		}
 	}
@@ -103,7 +103,7 @@ class MenuEditor: NSViewController {
 		} else {
 			menuData.insert(item, at: index)
 		}
-		outline.insertItems(at: [ index ], inParent: parent, withAnimation: [ .slideDown ])
+		outline.insertItems(at: [ index ], inParent: parent, withAnimation: [ NSTableView.AnimationOptions.slideDown ])
 	}
 
 	@IBAction func onAddMenu(_ sender: NSMenuItem) {
@@ -144,7 +144,7 @@ extension MenuEditor: NSOutlineViewDelegate {
 
 	func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
 		if let menuItem = item as? MenuItem {
-			let cell = outlineView.make(withIdentifier: "itemCell", owner: self) as! NSTableCellView
+			let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "itemCell"), owner: self) as! NSTableCellView
 
 			switch menuItem {
 			case .command(let title, _),
