@@ -85,7 +85,7 @@ class PrincipalClass: NSObject, THOPluginProtocol {
 
 	override init() {
 		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")!
-		prefsController = Preferences(nibName: "PreferencesView", bundle: bundle)!
+		prefsController = Preferences(nibName: NSNib.Name(rawValue: "PreferencesView"), bundle: bundle)
 
 		super.init()
 	}

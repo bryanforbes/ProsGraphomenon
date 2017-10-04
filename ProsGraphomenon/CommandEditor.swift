@@ -35,7 +35,7 @@ class CommandEditor: NSViewController {
 
 		let bundle = Bundle(identifier: "net.reigndropsfall.ProsGraphomenon")
 
-		super.init(nibName: "CommandEditorView", bundle: bundle!)
+		super.init(nibName: NSNib.Name(rawValue: "CommandEditorView"), bundle: bundle!)
 	}
 
 	required init?(coder: NSCoder) {
